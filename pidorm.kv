@@ -1,0 +1,550 @@
+# Pi Dorm GUI
+
+<Manager>:
+    id: screenmanager
+    MenuScreen:
+        id: menu_screen
+        name: 'screen0'
+        manager: screenmanager
+
+    ClockScreen:
+        id: clock_screen
+        name: 'screen1'
+        manager: screenmanager
+
+    WeatherScreen:
+        id: weather_screen
+        name: 'screen2'
+        manager: screenmanager
+
+<MenuScreen>:
+    GridLayout:
+        cols: 3
+        size: root.size
+        pos: root.pos
+        padding: 50, 90
+        spacing: 20, 30
+
+        Button:
+            text: "Clock"
+            background_color: (0.7, 0, 0, 1)
+            background_normal: ''
+            on_release:
+                root.clock_btn()
+                root.manager.transition.direction = "left"
+                root.manager.current = 'screen1'
+
+        Button:
+            text: "Timer"
+            background_color: (0, 0.7, 0, 1)
+            background_normal: ''
+            on_release:
+                root.timer_btn()
+                root.manager.transition.direction = "left"
+                root.manager.current = 'screen1'
+
+        Button:
+            text: "Weather"
+            background_color: (0, 0, 0.7, 1)
+            background_normal: ''
+            on_release:
+                root.weather_btn()
+                root.manager.transition.direction = "left"
+                root.manager.current = 'screen1'
+
+        Button:
+            text: "Calendar"
+            background_color: (0.7, 0.7, 0, 1)
+            background_normal: ''
+            on_release:
+                root.calendar_btn()
+                root.manager.transition.direction = "left"
+                root.manager.current = 'screen1'
+
+        Button:
+            text: "Preferences"
+            background_color: (0, 0.7, 0.7, 1)
+            background_normal: ''
+            on_release:
+                root.preferences_btn()
+                root.manager.transition.direction = "left"
+                root.manager.current = 'screen1'
+        Button:
+            text: "Desktop"
+            background_color: (0.7, 0, 0.7, 1)
+            background_normal: ''
+            on_release:
+                root.desktop_btn()
+                root.manager.transition.direction = "left"
+                root.manager.current = 'screen1'
+
+<ClockScreen>:
+    size: root.size
+    BoxLayout:
+        size_hint: (None, None)
+        size: (500, 160)
+        pos_hint: { 'center_x':0.5, 'center_y': 0.5}
+        orientation: 'vertical'
+        spacing: 50
+
+        Label:
+            size_hint: (None, None)
+            size: (500, 160)
+            text: root.current_time
+            font_size: 200
+
+        Label:
+            text: root.current_date
+            font_size: 40
+<StartScreen>:
+
+    id: ss
+    conbutton: conbutton
+    laser_button: laser_button
+    internal_test_button: internal_test_button
+    external_test_button: external_test_button
+    laser_id_1: laser_id_1
+    laser_id_2: laser_id_2
+    laser_id_3: laser_id_3
+    laser_id_4: laser_id_4
+    laser_power_800: laser_power_800
+    laser_power_3400: laser_power_3400
+    BoxLayout:
+        id: main_box
+        padding: 30
+        spacing: 10
+
+        canvas:
+            Color:
+                rgba: 0,0,0,1
+
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        orientation: 'vertical'
+        BoxLayout:                                                      #top bar
+            size_hint_y: None
+            height: 40
+
+            Button:
+                size_hint_x: None
+                text: "Back"
+                font_size: 30
+                on_press:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = "screen0"
+
+            Label:
+                size_hint_x: .8
+
+            Button:
+                size_hint_x: None
+                text: "Close"
+                font_size: 30
+                on_press:
+                    root.exit()
+        Button:
+            size_hint_y: .5
+            id: conbutton
+            font_size: 30
+            text: "Connect Meter"
+            color: 1,1,1,1
+            disabled_color: 1,1,1,1
+            on_press: root.connect_meter()
+            background_normal: ''
+            background_color: hex('#009828')
+
+        BoxLayout:
+            canvas:
+                Color:
+                    rgb: 0.5,0.5,0.5
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            height: 0.5
+            orientation: 'horizontal'
+            Label:
+                size_hint_x: 0.4
+                size_hint_y: 1
+                text: "Enter Laser Serial excluding |:"
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.6
+                BoxLayout:
+                    orientation:'horizontal'
+                    TextInput:
+                        id: laser_id_1
+                        size_hint_x: 0.1
+                        size_hint_y: 0.9
+                        multiline: False
+                        disabled: True
+                        text:'LR'
+                        font_size: 30
+                        on_double_tap: root.delete_text()
+                    TextInput:
+                        id: laser_id_2
+                        size_hint_x: 0.1
+                        size_hint_y: 0.9
+                        multiline: False
+                        disabled: True
+                        text:'SC'
+                        font_size: 30
+                        on_double_tap: root.delete_text()
+                    TextInput:
+                        id: laser_id_3
+                        size_hint_x: 0.1
+                        size_hint_y: 0.9
+                        multiline: False
+                        disabled: True
+                        text:'03'
+                        font_size: 30
+                        on_double_tap: root.delete_text()
+                    TextInput:
+                        id: laser_id_4
+                        size_hint_x: 0.3
+                        size_hint_y: 0.9
+                        multiline: False
+                        disabled: True
+                        text:'15070001'
+                        font_size: 30
+                        on_double_tap: root.delete_text()
+                Label:
+                    size_hint_y: 0.6
+        BoxLayout:
+            orientation: 'horizontal'
+            Button:
+                size_hint_y: .5
+                id: laser_button
+                font_size: 25
+                text: "Laser Cal/Testing"
+                #color: 1,1,1,1
+                #disabled_color: 0,1,0,1
+                disabled: True
+                on_press: root.change_text()
+                on_release:root.calibrate_laser()
+                background_normal: ''
+                background_color: hex('#DCDCDC')
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: "Power[mW] @ ~50mA"
+
+                Button:
+                    id:laser_power_800
+                    text:"no data"
+                    color: 1,1,1,1
+                    disabled: True
+                    background_normal: ''
+                    background_color: hex('#DCDCDC')
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text:"Power[mW] @ ~210mA"
+                Button:
+                    id:laser_power_3400
+                    text:"no data"
+                    color: 1,1,1,1
+                    disabled:True
+                    background_normal: ''
+                    background_color: hex('#DCDCDC')
+        BoxLayout:
+            orientation: 'horizontal'
+            height: 50
+            canvas:
+                Color:
+                    rgb: 0.5,0.5,0.5
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            Label:
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "Attenuation Testing"
+                font_size: 24
+                background_normal: ''
+                background_color: hex('#DCDCDC')
+
+            Button:
+                id: internal_test_button
+                size_hint_x: 0.3
+                text: "Test Internally"
+                font_size: 20
+                disabled: True
+                background_normal: ''
+                background_color: hex('#DCDCDC')
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "screen2"
+            Label:
+                size_hint_x: 0.1
+
+            Button:
+                id: external_test_button
+                size_hint_x: 0.3
+                text: "    Test Externally\n    (Requires External Cover\n    Tester)"
+                font_size: 20
+                disabled: True
+                background_normal: ''
+                background_color: hex('#DCDCDC')
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.warning_popup()
+                    root.manager.current = "screen2"
+
+<AttenuationTestingScreen>:
+    attenuation_button: attenuation_button
+    material_id_1: material_id_1
+    material_id_2: material_id_2
+    baseline_25mW: baseline_25mW
+    baseline_50mW: baseline_50mW
+    baseline_75mW: baseline_75mW
+    test1: test1
+    test2: test2
+    test3: test3
+    test1_25mW : test1_25mW
+    test1_50mW : test1_50mW
+    test1_75mW : test1_75mW
+    test1_percentage: test1_percentage
+    test2_25mW : test2_25mW
+    test2_50mW : test2_50mW
+    test2_75mW : test2_75mW
+    test2_percentage : test2_percentage
+    test3_25mW : test3_25mW
+    test3_50mW : test3_50mW
+    test3_75mW : test3_75mW
+    test3_percentage : test3_percentage
+    known_material: known_material
+    BoxLayout:                                                             #main
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgba: 0,0,0,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+        BoxLayout:                                                      #top bar
+            size_hint_y: None
+            orientation: 'horizontal'
+            height: 40
+
+            Button:
+                size_hint_x: None
+                text: "Back"
+                font_size: 30
+                on_press:
+                    root.manager.transition.direction = "right"
+                    root.manager.current = "screen1"
+
+            Label:
+                size_hint_x: .8
+
+            Button:
+                size_hint_x: None
+                text: "Close"
+                font_size: 30
+                on_press:
+                    root.exit()
+
+        BoxLayout:                                                          #Bottom Bar
+            size_hint_y: None
+            orientation: 'vertical'
+            BoxLayout:
+                height: 60
+                orientation: 'horizontal'
+                BoxLayout:
+                    size_hint_x: 0.2
+                    orientation: 'vertical'
+                    Label:
+                        text: "Known Material?"
+                    CheckBox:
+                        id: known_material
+                        active: False
+
+                Label:
+                    size_hint_x: 0.2
+                    text: "Enter Optical Surface,\n excluding -"
+                TextInput:
+                    id: material_id_1
+                    size_hint_x: 0.1
+                    text:"MIR"
+                    multiline: True
+                    font_size: 20
+                    on_double_tap: root.delete_text()
+                    disabled: False
+                TextInput:
+                    id: material_id_2
+                    size_hint_x: 0.2
+                    text:"000000"
+                    multiline: True
+                    font_size: 20
+                    on_double_tap: root.delete_text()
+                    disabled: False
+
+                Button:
+                    id: attenuation_button
+                    size_hint_x: 0.35
+                    text: 'Attenuation Test'
+                    font_size: 24
+                    on_press: root.change_text()
+                    on_release: root.attenuation_test()
+                    background_color: 0,1,0,1
+
+
+        GridLayout:
+            cols: 5
+            Button:
+                disabled: True
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "Test #"
+                font_size: 24
+            Button:
+                disabled: True
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "~25mW"
+                font_size: 24
+            Button:
+                disabled: True
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "~50mW"
+                font_size: 24
+            Button:
+                disabled: True
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "~75mW"
+                font_size: 24
+            Button:
+                disabled: True
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "% Attenuation"
+                font_size: 24
+
+
+            Label:
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "Baseline"
+                font_size: 24
+            Label:
+                id: baseline_25mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: baseline_50mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: baseline_75mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: baseline_percentage
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "0"
+                font_size: 24
+
+            Label:
+                id: test1
+                size_hint: 0.3,1
+                padding_x: 500
+                text: ""
+                font_size: 24
+            Label:
+                id: test1_25mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test1_50mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test1_75mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test1_percentage
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test2
+                size_hint: 0.3,1
+                padding_x: 500
+                text: ""
+                font_size: 24
+            Label:
+                id: test2_25mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test2_50mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test2_75mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test2_percentage
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test3
+                size_hint: 0.3,1
+                padding_x: 500
+                text: ""
+                font_size: 24
+            Label:
+                id: test3_25mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test3_50mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test3_75mW
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
+            Label:
+                id: test3_percentage
+                size_hint: 0.3,1
+                padding_x: 500
+                text: "n/a"
+                font_size: 24
